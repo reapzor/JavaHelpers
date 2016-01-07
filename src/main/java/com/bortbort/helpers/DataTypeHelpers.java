@@ -1,5 +1,8 @@
 package com.bortbort.helpers;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+
 /**
  * Created by chuck on 1/4/2016.
  */
@@ -15,5 +18,55 @@ public class DataTypeHelpers {
         }
         return new String(hexChars);
     }
+
+    public static String decodeTwoSevenBitByteString(byte[] bytes) throws UnsupportedEncodingException {
+        return decodeTwoSevenBitByteString(bytes, 0, bytes.length);
+    }
+
+    public static String decodeTwoSevenBitByteString(byte[] bytes, int offset, int size)
+            throws UnsupportedEncodingException {
+        byte[] decodedBytes = decodeTwoSevenBitByteSequence(bytes, offset, size);
+        return new String(decodedBytes, "UTF-8");
+    }
+
+    public static byte[] decodeTwoSevenBitByteSequence(byte[] encodedBytes) {
+        return decodeTwoSevenBitByteSequence(encodedBytes, 0, encodedBytes.length);
+    }
+
+    public static byte[] decodeTwoSevenBitByteSequence(byte[] encodedBytes, int offset, int size) {
+        size = size >>> 1;
+        ByteBuffer byteBuffer = ByteBuffer.allocate(size);
+
+        for (int x = 0; x < size; x++) {
+            byteBuffer.put((byte) (encodedBytes[offset++] + (encodedBytes[offset++] << 7)));
+        }
+
+        return byteBuffer.array();
+    }
+
+
+    public static byte[] encodeTwoSevenBitByteSequence(String string) {
+        return encodeTwoSevenBitByteSequence(string.getBytes());
+    }
+
+    public static byte[] encodeTwoSevenBitByteSequence(byte[] bytes) {
+        return encodeTwoSevenBitByteSequence(bytes, 0, bytes.length);
+    }
+
+    public static byte[] encodeTwoSevenBitByteSequence(byte[] bytes, int offset, int size) {
+        int encodedSize = size << 1;
+        ByteBuffer byteBuffer = ByteBuffer.allocate(encodedSize);
+
+        for (int x = 0; x < size; x++) {
+            byte b1 = (byte) (bytes[offset] & 0x7F);
+            byte b2 = (byte) ((bytes[offset] >> 7) & 0x7F);
+            byteBuffer.put(b1);
+            byteBuffer.put(b2);
+            offset++;
+        }
+
+        return byteBuffer.array();
+    }
+
 
 }
