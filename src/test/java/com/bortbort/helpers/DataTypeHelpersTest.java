@@ -2,6 +2,8 @@ package com.bortbort.helpers;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 /**
@@ -36,6 +38,6 @@ public class DataTypeHelpersTest {
 
         byte[] decodedRawBytes = DataTypeHelpers.decodeTwoSevenBitByteSequence(encodedRawBytes);
 
-        assertEquals(rawBytes, decodedRawBytes);
+        assertTrue(Arrays.equals(rawBytes, decodedRawBytes));
     }
 }
