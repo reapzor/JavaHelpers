@@ -56,7 +56,7 @@ public class DataTypeHelpers {
         return encodeTwoSevenBitByteSequence(string.getBytes());
     }
 
-    public static byte[] encodeTwoSevenBitByteSequence(byte[] bytes) {
+    public static byte[] encodeTwoSevenBitByteSequence(byte... bytes) {
         return encodeTwoSevenBitByteSequence(bytes, 0, bytes.length);
     }
 
@@ -65,18 +65,13 @@ public class DataTypeHelpers {
         ByteBuffer byteBuffer = ByteBuffer.allocate(encodedSize);
 
         for (int x = 0; x < size; x++) {
-            byteBuffer.put(encodeTwoSevenBitByteSequence(bytes[offset]));
+            byteBuffer.put(
+                    (byte) (bytes[offset] & 0x7F),
+                    (byte) ((bytes[offset] >> 7) & 0x7F));
             offset++;
         }
 
         return byteBuffer.array();
     }
-
-    public static byte[] encodeTwoSevenBitByteSequence(byte decodedByte) {
-        return new byte[] {
-                (byte) (decodedByte & 0x7F),
-                (byte) ((decodedByte >> 7) & 0x7F)};
-    }
-
 
 }
