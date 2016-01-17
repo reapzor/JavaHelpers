@@ -20,16 +20,17 @@ public class InputStreamHelpers {
         long timeoutTime = System.currentTimeMillis() + timeout;
 
         while (System.currentTimeMillis() < timeoutTime && readByteCount < length) {
-            int readBytes = inputStream.read(buffer, readByteCount, length);
-            if (readBytes == -1) {
+            int readByte = inputStream.read();
+            if (readByte == -1) {
                 return false;
             }
             else {
-                readByteCount += readBytes;
+                buffer[readByteCount] = (byte) readByte;
+                readByteCount += 1;
             }
         }
 
-        return !(System.currentTimeMillis() > timeoutTime);
+        return true;
     }
 
 }
