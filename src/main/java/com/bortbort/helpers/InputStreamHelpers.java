@@ -29,7 +29,7 @@ public class InputStreamHelpers {
             }
         }
 
-        return true;
+        return !(System.currentTimeMillis() > timeoutTime);
     }
 
 }
