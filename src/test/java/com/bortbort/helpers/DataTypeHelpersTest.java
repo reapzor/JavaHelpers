@@ -29,8 +29,10 @@ public class DataTypeHelpersTest {
 
     @Test
     public void testTwoSevenBitByteEncodingRawBytes() throws Exception {
-        byte[] rawBytes = new byte[] { (byte) 0xFE, (byte) 0xFF, (byte) 0xC3, (byte) 0x00 };
-        String encodedBytesHex = "7E7F7F7F437F0000";
+        byte[] rawBytes = new byte[] { (byte) 0x6F, (byte) 0x7F, (byte) 0xFE, (byte) 0xFF, (byte) 0xC3, (byte) 0x00 };
+        String encodedBytesHex = "6F007F007E7F7F7F437F0000";
+
+        //System.out.println(DataTypeHelpers.decodeTwoSevenBitByteSequence((byte) 0x7e, (byte) 0x7f));
 
         byte[] encodedRawBytes = DataTypeHelpers.encodeTwoSevenBitByteSequence(rawBytes);
 

@@ -47,7 +47,9 @@ public class DataTypeHelpers {
         return byteBuffer.array();
     }
 
-    public static byte decodeTwoSevenBitByteSequence(int byte1, int byte2) {
+    public static byte decodeTwoSevenBitByteSequence(byte byte1, byte byte2) {
+        //System.out.println(String.format("%s, %s", byte1, byte2));
+        //System.out.println((byte) (byte2 << 7));
         return (byte) (byte1 + (byte2 << 7));
     }
 
@@ -61,14 +63,14 @@ public class DataTypeHelpers {
     }
 
     public static byte[] encodeTwoSevenBitByteSequence(byte[] bytes, int offset, int size) {
-        int encodedSize = size << 1;
+        int encodedSize = size * 2;
         ByteBuffer byteBuffer = ByteBuffer.allocate(encodedSize);
 
-        for (int x = 0; x < size; x++) {
-            byteBuffer.put(
-                    (byte) (bytes[offset] & 0x7F),
-                    (byte) ((bytes[offset] >> 7) & 0x7F));
-            offset++;
+        for (int x = offset; x < size; x++) {
+            // Mask by 01111111 as we only want to preserve the first 7 bits only
+            byteBuffer.put((byte) (bytes[x] & 0x7F));
+            // Shift the byte over by 7 bits
+            byteBuffer.put((byte) (bytes[x] >>> 7 & 0x7f));
         }
 
         return byteBuffer.array();
